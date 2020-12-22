@@ -52,20 +52,14 @@ cd /tmp \
  && git clone --depth 1 https://github.com/wch/r-debug.git \
  && ./r-debug/r-devel/buildR.sh
 
-# Install helper packages
-RD -q -e 'install.packages(c("devtools", "packrat", "knitr"))'
+# Install packrat to detect other dependencies
+RD -q -e 'install.packages("packrat")'
 
 # download examples to home folder and install dependencies
 cd ~ \
  && git clone --depth 1 https://github.com/rstudio/shiny-examples.git \
  && RD -q -e 'install.packages(packrat:::dirDependencies("shiny-examples"))'
 
-# install github pkgs
-RD -q -e 'install.packages(c("ggvis", "dbplyr", "tm", "hicharter", "readr", "radiant"))'
-RD -q -e 'devtools::install_github("jcheng5/bubbles")'
-RD -q -e 'devtools::install_github("hadley/shinySignals")'
-
-# RD -q -e 'devtools::install_github("rstudio/shiny@v1.2-rc")'
-RD -q -e 'devtools::install_github("rstudio/shiny")'
+Rscript -e 'source("shiny-examples/install_deps.R", echo = TRUE)'
 
 # cd ~/shiny-examples && RSTUDIO_WHICH_R=`which RD` rstudio

@@ -133,8 +133,8 @@ function(input, output, session) {
         sort()
     }
     stillSelected <- isolate(input$cities[input$cities %in% cities])
-    updateSelectInput(session, "cities", choices = cities,
-      selected = stillSelected)
+    updateSelectizeInput(session, "cities", choices = cities,
+      selected = stillSelected, server = TRUE)
   })
 
   observe({
@@ -147,8 +147,8 @@ function(input, output, session) {
         sort()
     }
     stillSelected <- isolate(input$zipcodes[input$zipcodes %in% zipcodes])
-    updateSelectInput(session, "zipcodes", choices = zipcodes,
-      selected = stillSelected)
+    updateSelectizeInput(session, "zipcodes", choices = zipcodes,
+      selected = stillSelected, server = TRUE)
   })
 
   observe({
@@ -176,7 +176,7 @@ function(input, output, session) {
         is.null(input$zipcodes) | Zipcode %in% input$zipcodes
       ) %>%
       mutate(Action = paste('<a class="go-map" href="" data-lat="', Lat, '" data-long="', Long, '" data-zip="', Zipcode, '"><i class="fa fa-crosshairs"></i></a>', sep=""))
-    action <- DT::dataTableAjax(session, df)
+    action <- DT::dataTableAjax(session, df, outputId = "ziptable")
 
     DT::datatable(df, options = list(ajax = list(url = action)), escape = FALSE)
   })

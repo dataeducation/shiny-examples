@@ -1,3 +1,6 @@
+# enable reactlog recording
+options(shiny.reactlog = TRUE)
+
 # Source this script while your current directory is the shiny-examples repo root.
 #
 # Options:
@@ -87,7 +90,8 @@ run_next <- function() {
 run_app <- function(app, port, launch_browser, display_mode = "auto") {
   message("Running ", app)
 
-  if (grepl("026", app)) {
+  if (grepl("026", app) || grepl("169.*a$", app)) {
+
     rmarkdown::run(
       file.path(app, "index.Rmd"),
       shiny_args = list(
@@ -120,7 +124,7 @@ rerun <- function() {
     display_mode = display_mode
   )
 
-  if (new_process) {
+  if (new_process & !grepl("^169", args$app)) {
     callr::r(run_app, args, show = TRUE)
   } else {
     do.call(run_app, args)
@@ -151,3 +155,12 @@ auto_run <- function() {
     )
   }
 }
+
+url_links <- function(base_url) {
+  links <- paste0(base_url, sub("^\\.", "", dirs), "/")
+  cat(paste0(links, collapse = "\n"), "\n", sep = "")
+  invisible(links)
+}
+
+# Install packages needed for examples
+source("install_deps.R", echo = TRUE)
